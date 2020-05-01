@@ -1,0 +1,34 @@
+---
+- name: managing RPM basic packages
+  hosts: all
+  become: true
+  tasks:
+    - name: enable EPEL repository
+      yum:
+        name: epel-release
+        state: latest
+        update_cache: 'yes'
+    - name: install required packages
+      yum:
+        name:
+          - git
+          - unzip
+          - vim
+          - tree
+          - nc
+          - bind-utils
+          - at
+          - tmux
+          - net-tools
+          - wget
+          - mailx
+    - name: removed unused/unwanted software
+      yum:
+        name:
+          - kernel-devel.x86_64
+          - cpp
+          - firewalld
+          - NetworkManager
+          - samba-common
+        state: absent
+        autoremove: 'yes'
