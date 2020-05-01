@@ -48,7 +48,7 @@ VM smaller again.
 Also, some additional software is installed (and others removed), all of them
 small utilities. You can check what in the file `playbooks/packages.yaml`.
 
-Also, IPv6 is disable in the VM. See `playbooks/sysctl.yaml`
+Also, IPv6 is disabled in the VM. See `playbooks/sysctl.yaml`
 
 ## How to use it
 
