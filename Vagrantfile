@@ -3,11 +3,16 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+insecure_pub_key = <<~SCRIPT
+  /usr/bin/wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+  cat vagrant.pub > ~/.ssh/authorized_keys
+  rm -rf vagrant.pub
+SCRIPT
+
+yum = '/usr/bin/yum makecache fast && /usr/bin/yum upgrade -y'
+
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/7'
-  # Disable automatic box update checking. If you disable this, then
-  # boxes will only be checked for updates when the user runs
-  # `vagrant box outdated`. This is not recommended.
   config.vm.box_check_update = true
   config.vm.synced_folder './playbooks', '/vagrant'
   config.vm.provider 'virtualbox' do |vb|
@@ -20,8 +25,7 @@ Vagrant.configure('2') do |config|
   end
 
   # Faster than using Ansible
-  config.vm.provision 'shell', inline: '/usr/bin/yum makecache fast'
-  config.vm.provision 'shell', inline: '/usr/bin/yum upgrade -y'
+  config.vm.provision 'shell', inline: yum
 
   playbooks = ['packages.yaml', 'sysctl.yaml']
 
@@ -34,14 +38,7 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  insecure_pub_key = 'https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub'
-  script = <<~SCRIPT
-    /usr/bin/wget -c #{insecure_pub_key}
-    cat vagrant.pub > ~/.ssh/authorized_keys
-    rm -rf vagrant.pub
-  SCRIPT
-
   config.vm.provision 'shell',
-                      inline: script,
+                      inline: insecure_pub_key,
                       privileged: false
 end
