@@ -3,10 +3,13 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# forcing shutdown because Vagrant will fail to do it itself since the SSH
+# credential will be different
 insecure_pub_key = <<~SCRIPT
   /usr/bin/wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
   cat vagrant.pub > ~/.ssh/authorized_keys
   rm -rf vagrant.pub
+  sudo shutdown -h now
 SCRIPT
 
 yum = '/usr/bin/yum makecache fast && /usr/bin/yum upgrade -y'
@@ -22,11 +25,15 @@ Vagrant.configure('2') do |config|
     vb.memory = '4096'
     vb.cpus = 2
     vb.name = 'centos7-vbguest'
+    vb.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
+    vb.customize ['modifyvm', :id, '--boot1', 'disk']
+    vb.customize ['modifyvm', :id, '--boot2', 'dvd']
+    vb.customize ['modifyvm', :id, '--boot3', 'none']
+    vb.customize ['modifyvm', :id, '--vram', 9] # minimum value accepted
   end
 
   # Faster than using Ansible
   config.vm.provision 'shell', inline: yum
-
   playbooks = ['packages.yaml', 'sysctl.yaml']
 
   playbooks.each do |playbook_file|
@@ -34,7 +41,7 @@ Vagrant.configure('2') do |config|
       ans.playbook = playbook_file
       ans.compatibility_mode = '2.0'
       ans.install = true
-      ans.install_mode = :default
+      ans.install_mode = :pip
     end
   end
 

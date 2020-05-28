@@ -7,7 +7,7 @@
       yum:
         name: epel-release
         state: latest
-        update_cache: 'yes'
+        update_cache: 'no'
     - name: install required packages
       yum:
         name:
@@ -31,4 +31,3 @@
           - NetworkManager
           - samba-common
         state: absent
-        autoremove: 'yes'
