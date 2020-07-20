@@ -4,12 +4,12 @@
   become: true
   tasks:
     - name: enable EPEL repository
-      yum:
+      dnf:
         name: epel-release
         state: latest
-        update_cache: 'no'
+        update_cache: 'yes'
     - name: install required packages
-      yum:
+      dnf:
         name:
           - git
           - unzip
@@ -23,11 +23,10 @@
           - wget
           - mailx
     - name: removed unused/unwanted software
-      yum:
+      dnf:
         name:
           - kernel-devel.x86_64
           - cpp
           - firewalld
-          - NetworkManager
-          - samba-common
         state: absent
+        autoremove: 'yes'
