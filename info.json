@@ -1,0 +1,5 @@
+{
+  "author": "Alceu Rodrigues de Freitas Junior",
+  "website": "https://github.com/glasswalk3r/vagrant-centos-vbguest"
+  "description": "A Vagrant box based on CentOS for Virtualbox, with Virtualbox Guest Additions already included in the kernel."
+}

@@ -16,17 +16,13 @@ def custom_vb(vb_provider)
 end
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'centos/8'
-  config.vm.box_check_update = true
+  config.vm.box = 'centos/8-vbguest-base'
   config.vbguest.auto_update = true
   config.vm.synced_folder './playbooks', '/vagrant'
   config.vm.provider 'virtualbox' do |vb|
     custom_vb(vb)
   end
 
-  # Faster than using Ansible
-  dnf = '/usr/bin/dnf makecache && /usr/bin/dnf upgrade -y'
-  config.vm.provision 'shell', inline: dnf
   playbooks = ['packages.yaml', 'sysctl.yaml']
 
   playbooks.each do |playbook_file|
@@ -41,14 +37,12 @@ Vagrant.configure('2') do |config|
   # forcing shutdown because Vagrant will fail to do it itself since the SSH
   # credential will be different
   insecure_pub_key = <<~SCRIPT
-
-    if ! [ -f /home/vagrant/.ssh_setup_ok ]
-    then
-      /usr/bin/wget -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
-      mv -vf vagrant.pub ~/.ssh/authorized_keys
-      echo 'Done' > /home/vagrant/.ssh_setup_ok
-      sudo shutdown -h now
-    fi
+    /usr/bin/wget --no-verbose -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+    ls -l vagrant.pub
+    ls -l ~/.ssh/authorized_keys
+    ls -ld ~/.ssh/
+    cat vagrant.pub > ~/.ssh/authorized_keys
+    cat ~/.ssh/authorized_keys
   SCRIPT
 
   config.vm.provision 'shell',
