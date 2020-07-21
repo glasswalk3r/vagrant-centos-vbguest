@@ -43,6 +43,7 @@ Vagrant.configure('2') do |config|
     ls -ld ~/.ssh/
     cat vagrant.pub > ~/.ssh/authorized_keys
     cat ~/.ssh/authorized_keys
+    rm -fv vagrant.pub
   SCRIPT
 
   config.vm.provision 'shell',
