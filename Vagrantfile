@@ -15,6 +15,17 @@ def custom_vb(vb_provider)
   vb_provider.customize ['modifyvm', :id, '--vram', 9] # minimum value accepted
 end
 
+insecure_pub_key = <<~SCRIPT
+  set -e
+  /usr/bin/wget --no-verbose -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
+  ls -l vagrant.pub
+  ls -l ~/.ssh/authorized_keys
+  ls -ld ~/.ssh/
+  cat vagrant.pub > ~/.ssh/authorized_keys
+  cat ~/.ssh/authorized_keys
+  rm -fv vagrant.pub
+SCRIPT
+
 Vagrant.configure('2') do |config|
   config.vm.box = 'centos/8-vbguest-base'
   config.vbguest.auto_update = true
@@ -33,18 +44,6 @@ Vagrant.configure('2') do |config|
       ans.install_mode = :default
     end
   end
-
-  # forcing shutdown because Vagrant will fail to do it itself since the SSH
-  # credential will be different
-  insecure_pub_key = <<~SCRIPT
-    /usr/bin/wget --no-verbose -c https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub
-    ls -l vagrant.pub
-    ls -l ~/.ssh/authorized_keys
-    ls -ld ~/.ssh/
-    cat vagrant.pub > ~/.ssh/authorized_keys
-    cat ~/.ssh/authorized_keys
-    rm -fv vagrant.pub
-  SCRIPT
 
   config.vm.provision 'shell',
                       inline: insecure_pub_key,
