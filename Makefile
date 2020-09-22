@@ -15,3 +15,4 @@ destroy: clean
 clean:
 	rm -fv $(BOX_FILE)
 	vagrant destroy --force
+	vagrant box remove "arfreitas/${MY_NAME}" --all --force
