@@ -31,4 +31,3 @@
           - zlib-devel
         state: absent
         autoremove: 'yes'
-

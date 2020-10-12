@@ -27,7 +27,7 @@ insecure_pub_key = <<~SCRIPT
 SCRIPT
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'centos/8-vbguest-base'
+  config.vm.box = 'generic/centos8'
   config.vbguest.auto_update = true
   config.vm.synced_folder './playbooks', '/vagrant'
   config.vm.provider 'virtualbox' do |vb|
