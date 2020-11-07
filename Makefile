@@ -12,7 +12,7 @@ test:
 	ansible-playbook --check playbooks/*.yaml
 destroy: clean
 	vagrant box remove $(FULL_NAME)
-clean
+clean:
 	rm -fv $(BOX_FILE)
 	vagrant destroy --force
 	vagrant box remove "arfreitas/${MY_NAME}" --all --force
