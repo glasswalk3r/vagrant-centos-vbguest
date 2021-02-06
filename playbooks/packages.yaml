@@ -22,7 +22,7 @@
           - net-tools
           - wget
           - mailx
-    - name: removed unused/unwanted software
+    - name: removed unwanted software
       dnf:
         name:
           - kernel-devel

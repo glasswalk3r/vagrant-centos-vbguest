@@ -5,7 +5,7 @@
 
 def custom_vb(vb_provider)
   vb_provider.gui = false
-  vb_provider.memory = '4096'
+  vb_provider.memory = '2048'
   vb_provider.cpus = 2
   vb_provider.name = 'centos8-vbguest'
   vb_provider.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
@@ -29,6 +29,7 @@ SCRIPT
 Vagrant.configure('2') do |config|
   config.vm.box = 'generic/centos8'
   config.vbguest.auto_update = true
+  config.vbguest.installer_options = { allow_kernel_upgrade: true }
   config.vm.synced_folder './playbooks', '/vagrant'
   config.vm.provider 'virtualbox' do |vb|
     custom_vb(vb)

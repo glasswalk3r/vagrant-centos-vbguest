@@ -3,7 +3,9 @@ MY_NAME=centos8-vbguest
 FULL_NAME=arfreitas/centos8-vbguest
 
 image:
-	vagrant up
+	vagrant up --no-provision
+	vagrant vbguest --auto-reboot --do install
+	vagrant reload
 	vagrant package --base $(MY_NAME)
 	vagrant box add --name $(FULL_NAME) $(BOX_FILE)
 test:
