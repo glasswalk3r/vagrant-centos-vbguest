@@ -53,3 +53,8 @@ Also, IPv6 is disabled in the VM. See `playbooks/sysctl.yaml`
 ## How to use it
 
 Check the `Makefile` available.
+
+
+## Know issues
+
+https://github.com/rear/rear-workshop-osbconf-2016/issues/4
