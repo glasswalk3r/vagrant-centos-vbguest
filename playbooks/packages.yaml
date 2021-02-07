@@ -25,7 +25,8 @@
     - name: removed unused/unwanted software
       yum:
         name:
-          - kernel-devel.x86_64
+          - kernel-devel
+          - kernel-headers
           - cpp
           - firewalld
           - NetworkManager
