@@ -28,9 +28,8 @@ SCRIPT
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'generic/centos8'
-  config.vbguest.auto_update = true
-  config.vbguest.installer_options = { allow_kernel_upgrade: true }
-  config.vm.synced_folder './playbooks', '/vagrant'
+  config.vbguest.auto_update = false
+  #config.vbguest.installer_options = { allow_kernel_upgrade: true }
   config.vm.provider 'virtualbox' do |vb|
     custom_vb(vb)
   end
@@ -38,11 +37,9 @@ Vagrant.configure('2') do |config|
   playbooks = ['packages.yaml', 'sysctl.yaml']
 
   playbooks.each do |playbook_file|
-    config.vm.provision 'ansible_local' do |ans|
-      ans.playbook = playbook_file
+    config.vm.provision 'ansible' do |ans|
+      ans.playbook = "playbooks/#{playbook_file}"
       ans.compatibility_mode = '2.0'
-      ans.install = true
-      ans.install_mode = :default
     end
   end
 
